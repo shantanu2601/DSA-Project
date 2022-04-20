@@ -274,7 +274,7 @@ void user::vec_read_msg(vector<msg*> results)
 		return;
 	}
 
-	msg *ptr = results.at(no - 1);
+	msg *ptr = results.at(no - 1); // stores the address of the node of message to be read
 	cout << "\n..................................................................";
 	cout << "\n************** MESSAGE " << no << " **************";
 	cout << "\nFrom : " << ptr->from;
@@ -299,7 +299,7 @@ void user::vec_del_msg(vector<msg*> results, msg **head)
 	msg *ptr = *head;
 	msg *prev = *head;
 
-	if (results.at(no - 1) == *head) //if msg to be deleted is the first message
+	if (results.at(no - 1) == *head) //if msg to be deleted is the first message in the msg sll
 	{
 		*head = (*head)->link;
 		cout << "\nMessage deleted successfully!";
@@ -449,10 +449,10 @@ void user::starred_msg(string title, msg **head)
 	string R[] = { "unread", "read" };
 	string S[] = { "unstarred", "starred" };
 
-	msg *m = *head;
+	msg *m = *head; //pointer to the first node of sent/received msg sll for current user
 	if (head == NULL)
 	{
-		cout << "\nNo messages to display yet!";
+		cout << "\nNo messages to display yet!"; // no sent/received messages
 		return;
 	}
 
@@ -483,7 +483,7 @@ void user::starred_msg(string title, msg **head)
 				}
 				i++;
 				found = true;
-				results.push_back(m);
+				results.push_back(m); // adds the address of found(starred) msg to results vector
 
 				cout << "\n" << setw(5) << i << setw(15) << m->from << setw(15)
 						<< m->to << setw(15) << m->text.substr(0, 8) << "..."
@@ -493,7 +493,7 @@ void user::starred_msg(string title, msg **head)
 			}
 		}
 
-		if (m == NULL && !found)
+		if (m == NULL && !found) //no starred message present
 		{
 			cout << "\nNo messages found!\n";
 			return;
@@ -513,15 +513,15 @@ void user::starred_msg(string title, msg **head)
 				break;
 
 			case 1:
-				vec_read_msg(results);
+				vec_read_msg(results); //to read a starred message
 				break;
 
 			case 2:
-				vec_del_msg(results, head);
+				vec_del_msg(results, head); // to delete a starred message
 				break;
 
 			case 3:
-				vec_starUnstar(results);
+				vec_starUnstar(results); // to unstar a starred message
 				break;
 		}
 	} while (ch != 0);
@@ -550,7 +550,7 @@ void user::trash_options()
 
 		for (unsigned int i = 0; i < this->trash.size(); i++)
 		{
-			msg *m = this->trash[i];
+			msg *m = this->trash[i]; //gets the address of the i'th deleted message for the current user
 			cout << "\n" << setw(5) << i+1 << setw(15) << m->from << setw(15)
 								<< m->to << setw(15) << m->text.substr(0, 8) << "..."
 								<< setw(14) << m->dt.substr(4, 6) << setw(10) << R[m->read]<< setw(14) << S[m->star];
@@ -863,11 +863,11 @@ void messager::activity(user *ptr)
 				break;
 
 			case 7:
-				ptr->starred_msg("INBOX ", &ptr->headR);
+				ptr->starred_msg("INBOX ", &ptr->headR); //sends the head of the received msgs sll for current user
 				break;
 
 			case 8:
-				ptr->starred_msg("SENTBOX ", &ptr->headS);
+				ptr->starred_msg("SENTBOX ", &ptr->headS); ////sends the head of the sent msgs sll for current user
 				break;
 
 			default:
