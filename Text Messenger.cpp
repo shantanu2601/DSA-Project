@@ -61,7 +61,7 @@ class user
 		vector<msg*> trash;		//vector of deleted msg
 		user *next;
 		user *prev;
-		friend class messager;
+		//friend class messager;
 		user()
 		{
 			logged_in = false;
@@ -652,7 +652,7 @@ bool messager::is_empty()
 user* messager::accept()
 {
 	bool un_exist = false;
-	user *tmp = new user();
+	user *tmp = new user(); //new user node
 	user *ptr;
 	do
 	{
@@ -671,7 +671,7 @@ user* messager::accept()
 		}
 		if (ptr == NULL)
 			un_exist = false;
-	} while (un_exist);
+	} while (un_exist); // repeat till username isn't unique
 	cout << "\nCreate password: ";
 	cin >> tmp->password;
 	return tmp;
@@ -680,8 +680,8 @@ user* messager::accept()
 //creates new user account & adds it to user dll(sign-up)
 void messager::create()
 {
-	user *tmp = accept();
-	if (is_empty())
+	user *tmp = accept(); //accepts new username and password
+	if (is_empty()) //checks if user linked list is empty
 	{
 		start = tmp;
 		last = tmp;
@@ -701,17 +701,17 @@ void messager::login()
 	string un, pw;
 	cout << "\nEnter username: ";
 	cin >> un;
-	for (user *ptr = start; ptr != NULL; ptr = ptr->next)
+	for (user *ptr = start; ptr != NULL; ptr = ptr->next) //search for username in the user linked list
 	{
 		if (ptr->username == un)
 		{
 			cout << "\nEnter password: ";
 			cin >> pw;
 			if (ptr->password == pw)
-			{
-				ptr->logged_in = true;
+			{ // ptr is the node of the found user
+				ptr->logged_in = true; //if username and password is correct then log in
 				cout << "\nSuccessfully logged in.";
-				activity(ptr);
+				activity(ptr); //displays the next set of instructions the user can perform
 				return;
 			}
 			else
@@ -814,7 +814,7 @@ void messager::change_pw()
 
 //actions that user can perform while logged in
 void messager::activity(user *ptr)
-{
+{ //ptr contains the current(logged in) user information
 	int ch;
 	do
 	{
@@ -880,9 +880,9 @@ void messager::activity(user *ptr)
 //takes input to send msg, updates receiver's inbox & returns pointer to sent msg
 msg* messager::msg_sent()
 {
-	msg *m = new msg();
+	msg *m = new msg(); // new node of msg linked list
 	user *ptrT; 				//pointer To whom user is sending msg
-	bool un_exist = false;
+	bool un_exist = false;		// stays false till user enters a correct username to which msg is sent
 	do
 	{
 		cout << "Enter username of user to message : ";
@@ -890,17 +890,17 @@ msg* messager::msg_sent()
 		getchar(); //'\n'
 
 		//updating receiver's received msg sll
-		for (ptrT = start; ptrT != NULL; ptrT = ptrT->next)
+		for (ptrT = start; ptrT != NULL; ptrT = ptrT->next) //search for username in user dll
 		{
 			if (ptrT->username == m->to)
 			{
 				cout << "\nEnter message you want to send to @" <<m->to<< " :\n";
-				getline(cin, m->text);
+				getline(cin, m->text); //took input msg and stored at m->text
 
 				m->read = false;
 				time_t now = time(0); 		// current date/time based on current system
 				m->dt = ctime(&now);		// convert now to string form
-				un_exist = true;
+				un_exist = true;			// made true since username is now found
 				cout << "\nMessage sent successfully to @" << m->to;
 
 				//insert new msg at beginning of ptrT's received msg sll
@@ -926,6 +926,7 @@ void messager::send_msg(user *ptr)
 	//updating sender's (logged-in user's) sent msg sll
 	msg *m = new msg();			//create new msg to update user's sent msgs sll
 	m->sent = true;
+	m->read = false;
 	m->to = ms->to;
 	m->from = ms->from;
 	m->dt = ms->dt;
