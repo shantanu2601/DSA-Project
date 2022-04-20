@@ -89,7 +89,7 @@ class user
 
 };
 
-//To display sent messages
+//To display received/sent messages
 void user::display_msgs(string title, msg *head)
 {
 	string R[] = { "unread", "read" };
@@ -122,13 +122,13 @@ void user::display_msgs(string title, msg *head)
 	}
 }
 
-//Is only displayed if there are sent messages in the table. 
+//Is only displayed if there are received/sent messages in the table.
 void user::msg_options(string title, msg **head)
 {
 	int ch;
 	do
 	{
-		display_msgs(title, *head); //different functionalities for the sent messages in the table.
+		display_msgs(title, *head); //different functionalities for the received/sent messages in the table.
 		if (*head == NULL)
 			return;
 		cout << "\n********* " << title << " OPTIONS **********";
