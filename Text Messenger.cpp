@@ -33,8 +33,8 @@ class msg
 		bool read;			//true if msg has been read by the logged-in user
 		string dt; 			//date & time when msg was sent/received
 		string to;			//username of user to whom msg is sent
-		string from;		//username of user from whom msg is sent
-		string text;		//the actual message
+		string from;		        //username of user from whom msg is sent
+		string text;		        //the actual message
 		msg *link;
 
 		msg()
@@ -75,21 +75,21 @@ class user
 
 		void display_msgs(string title, msg *head);				//to display list of sent/inbox msg
 		void msg_options(string title, msg **head);				//actions user can perform with displayed list of msg
-		void read_msg(msg *head);								//to read a certain msg
-		void del_msg(msg **head);								//to delete a certain msg
-		void starUnstar_msg(msg *m);							//to mark an msg as important (star) or unstar
+		void read_msg(msg *head);					        //to read a certain msg
+		void del_msg(msg **head);						//to delete a certain msg
+		void starUnstar_msg(msg *m);						//to mark an msg as important (star) or unstar
 		void vec_read_msg(vector<msg*> results);				//to read msg from search results
-		void vec_del_msg(vector<msg*> results, msg **head); 	//to delete msg from search results
+		void vec_del_msg(vector<msg*> results, msg **head); 	                //to delete msg from search results
 		void vec_starUnstar(vector<msg*> results); 				//to star/unstar msg from search results
 		void search_msg(string title, msg **head);				//to search msg sent to/ received from a user
 		void starred_msg(string title, msg **head);				//displays list of starred msg
-		void trash_options();									//actions to perform on deleted msg
-		void del_permanently();									//to delete a msg from trash (permanently)
-		void read_trashMsg();									//to read a msg in trash
+		void trash_options();							//actions to perform on deleted msg
+		void del_permanently();							//to delete a msg from trash (permanently)
+		void read_trashMsg();							//to read a msg in trash
 
 };
 
-//to display list of sent/inbox msg
+//To display sent messages
 void user::display_msgs(string title, msg *head)
 {
 	string R[] = { "unread", "read" };
@@ -102,11 +102,11 @@ void user::display_msgs(string title, msg *head)
 	else
 	{
 		int i = 1;
-		cout << "\n-------------------------------------------------------------------------------------------------";
+		cout << "\n-------------------------------------------------------------------------------------------------"; //creates a table displaying sent messages
 		cout << "\n" << setw(5) << "No." << setw(15) << "From" << setw(15)
 				<< "To" << setw(15) << "Message" << setw(14) << "When"
 				<< setw(10) << "Status" << setw(14) << "Starred";
-		cout << "\n-------------------------------------------------------------------------------------------------";
+		cout << "\n-------------------------------------------------------------------------------------------------"; //setw is a function used to setwidth, for example setw(15)
 
 		msg *m = head;
 		while (m != NULL)
@@ -115,20 +115,20 @@ void user::display_msgs(string title, msg *head)
 					<< m->to << setw(15) << m->text.substr(0, 8) << "..."
 					<< setw(14) << m->dt.substr(4, 6) << setw(10) << R[m->read]
 					<< setw(14) << S[m->star];
-			cout << "\n-------------------------------------------------------------------------------------------------";
+			cout << "\n-------------------------------------------------------------------------------------------------"; //performs all the functionalities such as m->star etc for each particular sent message.
 			m = m->link;
-			i++;
+			i++; 
 		}
 	}
 }
 
-//actions user can perform with displayed list of msg
+//Is only displayed if there are sent messages in the table. 
 void user::msg_options(string title, msg **head)
 {
 	int ch;
 	do
 	{
-		display_msgs(title, *head);
+		display_msgs(title, *head); //different functionalities for the sent messages in the table.
 		if (*head == NULL)
 			return;
 		cout << "\n********* " << title << " OPTIONS **********";
@@ -159,7 +159,7 @@ void user::msg_options(string title, msg **head)
 	} while (ch != 0);
 }
 
-//to read a certain msg
+//To read a particular message
 void user::read_msg(msg *head)
 {
 	int no;
@@ -189,7 +189,7 @@ void user::read_msg(msg *head)
 	ptr->read = true;
 }
 
-//to delete a certain msg //it adds the deleted msg to trash
+//To delete a particular valid message and add it to trash.
 void user::del_msg(msg **head)
 {
 	if (*head == NULL)
@@ -208,9 +208,9 @@ void user::del_msg(msg **head)
 
 	msg *ptr = *head;
 	msg *prev = *head;
-	if (no == 1)
+	if (no == 1) //if message to be deleted is the first message
 	{
-		*head = (*head)->link;
+		*head = (*head)->link; 
 		cout << "Message deleted successfully!!\n";
 		trash.push_back(ptr);
 		return;
@@ -226,12 +226,12 @@ void user::del_msg(msg **head)
 			return;
 		}
 	}
-	prev->link = ptr->link;
-	trash.push_back(ptr);
+	prev->link = ptr->link;      //points the previous message to the current messages next message.
+	trash.push_back(ptr);        //deletes the message where pointer currently lies.
 	cout << "Message deleted successfully!!\n";
 }
 
-//to mark an msg as important (star) or unstar
+//To star or unstar a message,i.e to mark a message as important, or remove that mark. 
 void user::starUnstar_msg(msg *head)
 {
 	int no = input_num("\nEnter message no. to star/unstar: ");
