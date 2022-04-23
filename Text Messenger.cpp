@@ -9,7 +9,7 @@
 using namespace std;
 
 //to deal with bad input
-int badinput(string prompt)
+int input(string prompt)
 {
 	int inp;
 	cout << prompt;
@@ -136,7 +136,7 @@ void user::msg_options(string title, msg **head)
 		cout << "\n1. Read a message";
 		cout << "\n2. Delete a message";
 		cout << "\n3. Star/Unstar a message";
-		ch = input_num("\nEnter your choice: ");
+		ch = input("\nEnter your choice: ");
 		cout << "\n---------------------------------------------";
 
 		switch (ch)
@@ -163,7 +163,7 @@ void user::msg_options(string title, msg **head)
 void user::read_msg(msg *head)
 {
 	int no;
-	no = input_num("\nEnter message no. to read: ");
+	no = input("\nEnter message no. to read: ");
 	if (no < 1)
 	{
 		cout << "\nInvalid message no.";
@@ -198,7 +198,7 @@ void user::del_msg(msg **head)
 		return;
 	}
 
-	int no = input_num("\nEnter message no. to delete: ");
+	int no = input("\nEnter message no. to delete: ");
 
 	if (no < 1)
 	{
@@ -234,7 +234,7 @@ void user::del_msg(msg **head)
 //To star or unstar a message,i.e to mark a message as important, or remove that mark. 
 void user::starUnstar_msg(msg *head)
 {
-	int no = input_num("\nEnter message no. to star/unstar: ");
+	int no = input("\nEnter message no. to star/unstar: ");
 
 	if (no < 1)
 	{
@@ -266,7 +266,7 @@ void user::starUnstar_msg(msg *head)
 //to read msg from search results or from starred msg list
 void user::vec_read_msg(vector<msg*> results)
 {
-	unsigned int no = unsigned(input_num("\nEnter message no. to read: "));
+	unsigned int no = unsigned(input("\nEnter message no. to read: "));
 
 	if (no < 1 || no > results.size())
 	{
@@ -288,7 +288,7 @@ void user::vec_read_msg(vector<msg*> results)
 //to delete msg from search results or from starred msg list
 void user::vec_del_msg(vector<msg*> results, msg **head)
 {
-	unsigned int no = unsigned(input_num("\nEnter message no. to delete: "));
+	unsigned int no = unsigned(input("\nEnter message no. to delete: "));
 
 	if (no < 1 || no > results.size())
 	{
@@ -328,7 +328,7 @@ void user::vec_del_msg(vector<msg*> results, msg **head)
 //to star/unstar msg from search results
 void user::vec_starUnstar(vector<msg*> results)
 {
-	unsigned int no = unsigned(input_num("\nEnter message no. to star/unstar: "));
+	unsigned int no = unsigned(input("\nEnter message no. to star/unstar: "));
 
 	if (no < 1 || no > results.size())
 	{
@@ -419,7 +419,7 @@ void user::search_msg(string title, msg **head)
 		cout << "\n1. Read a message";
 		cout << "\n2. Delete a message";
 		cout << "\n3. Star/Unstar a message";
-		ch = input_num("\nEnter your choice: ");
+		ch = input("\nEnter your choice: ");
 		cout << "\n---------------------------------------------";
 
 		switch (ch)
@@ -504,7 +504,7 @@ void user::starred_msg(string title, msg **head)
 		cout << "\n1. Read a message";
 		cout << "\n2. Delete a message";
 		cout << "\n3. Star/Unstar a message";
-		ch = input_num("\nEnter your choice: ");
+		ch = input("\nEnter your choice: ");
 		cout << "\n---------------------------------------------";
 
 		switch (ch)
@@ -583,7 +583,7 @@ void user::trash_options()
 //to delete a msg from trash (permanently)
 void user::del_permanently()
 {
-	unsigned int no = unsigned(input_num("\nEnter message no. to delete: "));
+	unsigned int no = unsigned(input("\nEnter message no. to delete: "));
 	if (no > trash.size() || no < 1)
 	{
 		cout << "Invalid message no.\n";
@@ -599,7 +599,7 @@ void user::del_permanently()
 //to read a msg in trash
 void user::read_trashMsg()
 {
-	unsigned int no = unsigned(input_num("\nEnter message no. to read: "));
+	unsigned int no = unsigned(input("\nEnter message no. to read: "));
 
 	if (no < 1 || no > trash.size())
 	{
@@ -828,7 +828,7 @@ void messager::activity(user *ptr)
 		cout << "\n6. View deleted messages";
 		cout << "\n7. View starred messages in Inbox";
 		cout << "\n8. View starred messages in Sentbox";
-		ch = input_num("\nEnter your choice: ");
+		ch = input("\nEnter your choice: ");
 		cout << "\n------------------------------------------\n";
 
 		switch (ch)
@@ -950,7 +950,7 @@ int main()
 		cout << "\n2. Login to your account";
 		cout << "\n3. Delete an existing account";
 		cout << "\n4. Change Password";
-		ch = input_num("\nEnter your choice: ");
+		ch = input("\nEnter your choice: ");
 		cout << "\n----------------------------------------";
 
 		switch (ch)
