@@ -1,15 +1,8 @@
-#include<iostream>
-#include<iomanip>
-#include <ctime>
-#include<vector>
-#include <limits>
 #include "classes.cpp"
 #include "logincheck.cpp"
 #include "useroptions.cpp"
 #include "deleteoptions.cpp"
 #include "starrfunctions.cpp"
-using namespace std;
-
 
 //actions that user can perform while logged in
 void mailingclone::useractions(user *n)

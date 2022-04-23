@@ -1,10 +1,5 @@
-#include<iostream>
-#include<iomanip>
-#include <ctime>
-#include<vector>
-#include <limits>
 #include "classes.cpp"
-using namespace std;
+
 //to read msg from search results or from starred msg list
 void user::vec_msgread(vector<msg*> results)
 {

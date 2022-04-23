@@ -1,12 +1,4 @@
-#include<iostream>
-#include<iomanip>
-#include <ctime>
-#include<vector>
-#include <limits>
 #include "classes.cpp"
-
-using namespace std;
-
 
 //To display received/sent messages
 void user::displaymsg(string title, msg *head)

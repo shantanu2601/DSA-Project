@@ -1,3 +1,4 @@
+#pragma once
 #include<iostream>
 #include<iomanip>
 #include <ctime>
@@ -6,6 +7,24 @@
 
 
 using namespace std;
+
+
+
+//to deal with bad input
+int input(string prompt)
+{
+	int inp;
+	cout << prompt;
+	cin >> inp;
+	while (cin.fail())
+	{
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		cout << "\nInput is invalid.Please try again. \n" << prompt;
+		cin >> inp;
+	}
+	return inp;
+}
 
 class msg
 {

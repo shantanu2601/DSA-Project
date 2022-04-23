@@ -1,12 +1,6 @@
 // we have 2 single linked list(declared in msg class): one for storing user's sent messages, and one for user's received messages
 // we have 1 doubly linked list: for storing the list of users
-#include<iostream>
-#include<iomanip>
-#include <ctime>
-#include<vector>
-#include <limits>
 #include "classes.cpp"
-using namespace std;
 
 //returns true if no user has created account yet
 bool mailingclone::noaccount()

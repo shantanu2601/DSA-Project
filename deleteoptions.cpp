@@ -1,3 +1,6 @@
+#include "classes.cpp"
+
+
 //actions to perform on deleted msg
 void user::deloptions()
 {
