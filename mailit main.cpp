@@ -7,6 +7,7 @@
 #include "logincheck.cpp"
 #include "useroptions.cpp"
 #include "deleteoptions.cpp"
+#include "starrfunctions.cpp"
 using namespace std;
 
 
