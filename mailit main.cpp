@@ -6,6 +6,7 @@
 #include "classes.cpp"
 #include "logincheck.cpp"
 #include "useroptions.cpp"
+#include "deleteoptions.cpp"
 using namespace std;
 
 
