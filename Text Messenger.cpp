@@ -18,7 +18,7 @@ int input(string prompt)
 	{
 		cin.clear();
 		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		cout << "\nInvalid input. Try again. \n" << prompt;
+		cout << "\nInput is invalid.Please try again. \n" << prompt;
 		cin >> inp;
 	}
 	return inp;
@@ -28,22 +28,22 @@ int input(string prompt)
 class msg
 {
 	public:
-		bool star;			//true if msg is starred
+		bool msgstar;			//true if msg is starred
 		bool sent;			//true if msg has been sent to whom the user wishes to
 		bool read;			//true if msg has been read by the logged-in user
-		string dt; 			//date & time when msg was sent/received
-		string to;			//username of user to whom msg is sent
-		string from;		        //username of user from whom msg is sent
+		string dattime; 			//date & time when msg was sent/received
+		string userto;			//username of user to whom msg is sent
+		string userfrom;		        //username of user from whom msg is sent
 		string text;		        //the actual message
 		msg *link;
 
 		msg()
 		{
-			star = false;
+			msgstar = false;
 			sent = false;
 			read = true;
-			to = "";
-			from = "";
+			userto = "";
+			userfrom = "";
 			text = "";
 			link = NULL;
 		}
@@ -56,8 +56,8 @@ class user
 		bool loggedin;
 		string username;
 		string password;
-		msg *head2; 			//sent msg SLL head. so for each user we have a (single)linked list of sent messages
-		msg *head1; 			//received msg SLL head. so for each user we also have a (single)linked list of received messages
+		msg *head2; 			//Singly Linked List for sent messages. so for each user we have a (single)linked list of sent messages
+		msg *head1; 			//Singly linked List for reciever messages. so for each user we also have a (single)linked list of received messages
 		vector<msg*> trash;		//vector of deleted msg
 		user *next;
 		user *prev;
@@ -73,27 +73,27 @@ class user
 			prev = NULL;
 		}
 
-		void display_msgs(string title, msg *head);				//to display list of sent/inbox msg
+		void displaymsg(string title, msg *head);				//to display list of sent/inbox msg
 		void useroptions(string title, msg **head);				//actions user can perform with displayed list of msg
-		void read_msg(msg *head);					        //to read a certain msg
-		void del_msg(msg **head);						//to delete a certain msg
-		void starUnstar_msg(msg *m);						//to mark an msg as important (star) or unstar
-		void vec_read_msg(vector<msg*> results);				//to read msg from search results
-		void vec_del_msg(vector<msg*> results, msg **head); 	                //to delete msg from search results
+		void msgread(msg *head);					        //to read a certain msg
+		void msgdel(msg **head);						//to delete a certain msg
+		void starunstarr(msg *m);						//to mark an msg as important (star) or unstar
+		void vec_msgread(vector<msg*> results);				//to read msg from search results
+		void vec_msgdel(vector<msg*> results, msg **head); 	                //to delete msg from search results
 		void vec_starUnstar(vector<msg*> results); 				//to star/unstar msg from search results
 		void msgsearch(string title, msg **head);				//to search msg sent to/ received from a user
 		void strmsg(string title, msg **head);				//displays list of starred msg
 		void deloptions();							//actions to perform on deleted msg
-		void del_permanently();							//to delete a msg from trash (permanently)
-		void read_trashMsg();							//to read a msg in trash
+		void permdelete();							//to delete a msg from trash (permanently)
+		void trashread();							//to read a msg in trash
 
 };
 
 //To display received/sent messages
-void user::display_msgs(string title, msg *head)
+void user::displaymsg(string title, msg *head)
 {
-	string R[] = { "unread", "read" };
-	string S[] = { "unstarred", "starred" };
+	string A[] = { "unread", "read" };
+	string B[] = { "unstarred", "starred" };
 	cout <<"\n******************************* " <<title<< " *******************************";
 
 	if (head == NULL)
@@ -111,10 +111,10 @@ void user::display_msgs(string title, msg *head)
 		msg *m = head;
 		while (m != NULL)
 		{
-			cout << "\n" << setw(5) << i << setw(15) << m->from << setw(15)
-					<< m->to << setw(15) << m->text.substr(0, 8) << "..."
-					<< setw(14) << m->dt.substr(4, 6) << setw(10) << R[m->read]
-					<< setw(14) << S[m->star];
+			cout << "\n" << setw(5) << i << setw(15) << m->userfrom << setw(15)
+					<< m->userto << setw(15) << m->text.substr(0, 8) << "..."
+					<< setw(14) << m->dattime.substr(4, 6) << setw(10) << A[m->read]
+					<< setw(14) << B[m->msgstar];
 			cout << "\n-------------------------------------------------------------------------------------------------"; //performs all the functionalities such as m->star etc for each particular sent message.
 			m = m->link;
 			i++; 
@@ -128,7 +128,7 @@ void user::useroptions(string title, msg **head)
 	int ch;
 	do
 	{
-		display_msgs(title, *head); //different functionalities for the received/sent messages in the table.
+		displaymsg(title, *head); //different functionalities for the received/sent messages in the table.
 		if (*head == NULL)
 			return;
 		cout << "\n********* " << title << " OPTIONS **********";
@@ -145,22 +145,22 @@ void user::useroptions(string title, msg **head)
 				break;
 
 			case 1:
-				read_msg(*head);
+				msgread(*head);
 				break;
 
 			case 2:
-				del_msg(head);
+				msgdel(head);
 				break;
 
 			case 3:
-				starUnstar_msg(*head);
+				starunstarr(*head);
 				break;
 		}
 	} while (ch != 0);
 }
 
 //To read a particular message
-void user::read_msg(msg *head)
+void user::msgread(msg *head)
 {
 	int no;
 	no = input("\nEnter message no. to read: ");
@@ -181,16 +181,16 @@ void user::read_msg(msg *head)
 	}
 	cout << "\n..................................................................";
 	cout << "\n************** MESSAGE " << no << " **************";
-	cout << "\nFrom : " << ptr->from;
-	cout << "\nTo : " << ptr->to;
-	cout << "\nWhen : " << ptr->dt;
+	cout << "\nFrom : " << ptr->userfrom;
+	cout << "\nTo : " << ptr->userto;
+	cout << "\nWhen : " << ptr->dattime;
 	cout << "\nMessage : \n" << ptr->text;
 	cout << "\n...................................................................\n";
 	ptr->read = true;
 }
 
 //To delete a particular valid message and add it to trash.
-void user::del_msg(msg **head)
+void user::msgdel(msg **head)
 {
 	if (*head == NULL)
 	{
@@ -232,7 +232,7 @@ void user::del_msg(msg **head)
 }
 
 //To star or unstar a message,i.e to mark a message as important, or remove that mark. 
-void user::starUnstar_msg(msg *head)
+void user::starunstarr(msg *head)
 {
 	int no = input("\nEnter message no. to star/unstar: ");
 
@@ -251,20 +251,20 @@ void user::starUnstar_msg(msg *head)
 			return;
 		}
 	}
-	if (ptr->star == false)
+	if (ptr->msgstar == false)
 	{
-		ptr->star = true;
+		ptr->msgstar = true;
 		cout << "Message no. " << no << " has been starred.\n";
 	}
 	else
 	{
-		ptr->star = false;
+		ptr->msgstar = false;
 		cout << "Message no. " << no << " has been unstarred.\n";
 	}
 }
 
 //to read msg from search results or from starred msg list
-void user::vec_read_msg(vector<msg*> results)
+void user::vec_msgread(vector<msg*> results)
 {
 	unsigned int no = unsigned(input("\nEnter message no. to read: "));
 
@@ -277,16 +277,16 @@ void user::vec_read_msg(vector<msg*> results)
 	msg *ptr = results.at(no - 1); // stores the address of the node of message to be read
 	cout << "\n..................................................................";
 	cout << "\n************** MESSAGE " << no << " **************";
-	cout << "\nFrom : " << ptr->from;
-	cout << "\nTo : " << ptr->to;
-	cout << "\nWhen : " << ptr->dt;
+	cout << "\nFrom : " << ptr->userfrom;
+	cout << "\nTo : " << ptr->userto;
+	cout << "\nWhen : " << ptr->dattime;
 	cout << "\nMessage : \n" << ptr->text;
 	cout << "\n...................................................................\n";
 	ptr->read = true;
 }
 
 //to delete msg from search results or from starred msg list
-void user::vec_del_msg(vector<msg*> results, msg **head)
+void user::vec_msgdel(vector<msg*> results, msg **head)
 {
 	unsigned int no = unsigned(input("\nEnter message no. to delete: "));
 
@@ -337,14 +337,14 @@ void user::vec_starUnstar(vector<msg*> results)
 	}
 
 	msg *ptr = results.at(no - 1);
-	if (ptr->star) // if message is starred, then unstar it
+	if (ptr->msgstar) // if message is starred, then unstar it
 	{
-		ptr->star = false;
+		ptr->msgstar = false;
 		cout << "Message no. " << no << " has been unstarred.\n";
 	}
 	else //if message is unstarred, then star it
 	{
-		ptr->star = true;
+		ptr->msgstar = true;
 		cout << "Message no. " << no << " has been starred.\n";
 	}
 }
@@ -366,8 +366,8 @@ void user::msgsearch(string title, msg **head)
 
 	string cmp;
 
-	string R[] =  { "unread", "read" };
-	string S[] =  { "unstarred", "starred" };
+	string A[] =  { "unread", "read" };
+	string B[] =  { "unstarred", "starred" };
 
 	int ch, i;
 	do
@@ -379,9 +379,9 @@ void user::msgsearch(string title, msg **head)
 		for (m = *head; m != NULL; m = m->link)
 		{
 			if (title == "SENT TO ")//if we want to check sent messages to a user
-				cmp = m->to;
+				cmp = m->userto;
 			else //"RECEIVED FROM "
-				cmp = m->from;
+				cmp = m->userfrom;
 
 			if (cmp == un) //message found
 			{
@@ -400,10 +400,10 @@ void user::msgsearch(string title, msg **head)
 				found = true;
 				results.push_back(m); //append the reference of found(searched) message to results vector
 
-				cout << "\n" << setw(5) << i << setw(15) << m->from << setw(15)
-						<< m->to << setw(15) << m->text.substr(0, 8) << "..."
-						<< setw(14) << m->dt.substr(4, 6) << setw(10)
-						<< R[m->read] << setw(14) << S[m->star];
+				cout << "\n" << setw(5) << i << setw(15) << m->userfrom << setw(15)
+						<< m->userto << setw(15) << m->text.substr(0, 8) << "..."
+						<< setw(14) << m->dattime.substr(4, 6) << setw(10)
+						<< A[m->read] << setw(14) << B[m->msgstar];
 				cout << "\n-------------------------------------------------------------------------------------------------";
 			}
 		}
@@ -428,11 +428,11 @@ void user::msgsearch(string title, msg **head)
 				break;
 
 			case 1:
-				vec_read_msg(results);
+				vec_msgread(results);
 				break;
 
 			case 2:
-				vec_del_msg(results, head);
+				vec_msgdel(results, head);
 				break;
 
 			case 3:
@@ -468,7 +468,7 @@ void user::strmsg(string title, msg **head)
 		for (m = *head; m != NULL; m = m->link)
 		{
 
-			if (m->star == true)
+			if (m->msgstar == true)
 			{
 
 				if (!found)
@@ -485,10 +485,10 @@ void user::strmsg(string title, msg **head)
 				found = true;
 				results.push_back(m); // adds the address of found(starred) msg to results vector
 
-				cout << "\n" << setw(5) << i << setw(15) << m->from << setw(15)
-						<< m->to << setw(15) << m->text.substr(0, 8) << "..."
-						<< setw(14) << m->dt.substr(4, 6) << setw(10)
-						<< R[m->read] << setw(14) << S[m->star];
+				cout << "\n" << setw(5) << i << setw(15) << m->userfrom << setw(15)
+						<< m->userto << setw(15) << m->text.substr(0, 8) << "..."
+						<< setw(14) << m->dattime.substr(4, 6) << setw(10)
+						<< R[m->read] << setw(14) << S[m->msgstar];
 				cout << "\n-------------------------------------------------------------------------------------------------";
 			}
 		}
@@ -513,11 +513,11 @@ void user::strmsg(string title, msg **head)
 				break;
 
 			case 1:
-				vec_read_msg(results); //to read a starred message
+				vec_msgread(results); //to read a starred message
 				break;
 
 			case 2:
-				vec_del_msg(results, head); // to delete a starred message
+				vec_msgdel(results, head); // to delete a starred message
 				break;
 
 			case 3:
@@ -534,8 +534,8 @@ void user::deloptions()
 	int ch;
 	do
 	{
-		string R[] = { "unread", "read" };
-		string S[] = { "unstarred", "starred" };
+		string A[] = { "unread", "read" };
+		string B[] = { "unstarred", "starred" };
 		if (this->trash.size() == 0)
 		{
 			cout << "Trash empty\n";
@@ -551,9 +551,9 @@ void user::deloptions()
 		for (unsigned int i = 0; i < this->trash.size(); i++)
 		{
 			msg *m = this->trash[i]; //gets the address of the i'th deleted message for the current user
-			cout << "\n" << setw(5) << i+1 << setw(15) << m->from << setw(15)
-								<< m->to << setw(15) << m->text.substr(0, 8) << "..."
-								<< setw(14) << m->dt.substr(4, 6) << setw(10) << R[m->read]<< setw(14) << S[m->star];
+			cout << "\n" << setw(5) << i+1 << setw(15) << m->userfrom << setw(15)
+								<< m->userto << setw(15) << m->text.substr(0, 8) << "..."
+								<< setw(14) << m->dattime.substr(4, 6) << setw(10) << A[m->read]<< setw(14) << B[m->msgstar];
 			cout << "\n-------------------------------------------------------------------------------------------------";
 		}
 
@@ -570,18 +570,18 @@ void user::deloptions()
 				break;
 
 			case 1:
-				del_permanently();
+				permdelete();
 				break;
 
 			case 2:
-				read_trashMsg();
+				trashread();
 				break;
 		}
 	} while (ch != 0);
 }
 
 //to delete a msg from trash (permanently)
-void user::del_permanently()
+void user::permdelete()
 {
 	unsigned int no = unsigned(input("\nEnter message no. to delete: "));
 	if (no > trash.size() || no < 1)
@@ -597,7 +597,7 @@ void user::del_permanently()
 }
 
 //to read a msg in trash
-void user::read_trashMsg()
+void user::trashread()
 {
 	unsigned int no = unsigned(input("\nEnter message no. to read: "));
 
@@ -609,9 +609,9 @@ void user::read_trashMsg()
 
 	cout << "\n..................................................................";
 	cout << "\n************** MESSAGE " << no << " **************";
-	cout << "\nFrom : " << trash[no - 1]->from;
-	cout << "\nTo : " << trash[no - 1]->to;
-	cout << "\nWhen : " << trash[no - 1]->dt;
+	cout << "\nFrom : " << trash[no - 1]->userfrom;
+	cout << "\nTo : " << trash[no - 1]->userto;
+	cout << "\nWhen : " << trash[no - 1]->dattime;
 	cout << "\nMessage : \n" << trash[no - 1]->text;
 	cout << "\n...................................................................\n";
 	trash[no - 1]->read = true;
@@ -886,22 +886,22 @@ msg* mailingclone::sendmessage()
 	do
 	{
 		cout << "Enter username of user to message : ";
-		cin >> messg->to;
+		cin >> messg->userto;
 		getchar(); //'\n'
 
 		//updating receiver's received msg sll
 		for (msgptr = first; msgptr != NULL; msgptr = msgptr->next) //search for username in user dll
 		{
-			if (msgptr->username == messg->to)
+			if (msgptr->username == messg->userto)
 			{
-				cout << "\nEnter message you want to send to @" <<messg->to<< " :\n";
+				cout << "\nEnter message you want to send to @" <<messg->userto<< " :\n";
 				getline(cin, messg->text); //took input msg and stored at m->text
 
 				messg->read = false;
 				time_t now = time(0); 		// current date/time based on current system
-				messg->dt = ctime(&now);		// convert now to string form
+				messg->dattime = ctime(&now);		// convert now to string form
 				userexist = true;			// made true since username is now found
-				cout << "\nMessage sent successfully to @" << messg->to;
+				cout << "\nMessage sent successfully to @" << messg->userto;
 
 				//insert new msg at beginning of ptrT's received msg sll
 				messg->link = msgptr->head1;
@@ -921,15 +921,15 @@ msg* mailingclone::sendmessage()
 void mailingclone::sendmsgfunc(user *ptr)
 {
 	msg *ms = sendmessage(); 		//pointer to sent msg
-	ms->from = ptr->username;
+	ms->userfrom = ptr->username;
 
 	//updating sender's (logged-in user's) sent msg sll
 	msg *m = new msg();			//create new msg to update user's sent msgs sll
 	m->sent = true;
 	m->read = false;
-	m->to = ms->to;
-	m->from = ms->from;
-	m->dt = ms->dt;
+	m->userto = ms->userto;
+	m->userfrom = ms->userfrom;
+	m->dattime = ms->dattime;
 	m->text = ms->text;
 
 	//insert sent msg at beginning of sent sll
@@ -981,4 +981,3 @@ int main()
 	} while (ch != 0);
 	return 0;
 }
-
