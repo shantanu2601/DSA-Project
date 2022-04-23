@@ -133,3 +133,47 @@ void mailingclone::sendmsgfunc(user *ptr)
 	m->link = ptr->head2;
 	ptr->head2 = m;
 }
+int main()
+{
+	int ch;
+	mailingclone A;
+	do
+	{
+		cout << "\n----------------------------------------";
+		cout << "\n******** WELCOME TO MAILIT! **********";
+		cout << "\n0. Exit application";
+		cout << "\n1. Create a new mailit account";
+		cout << "\n2. Login to your existing mailit account";
+		cout << "\n3. Delete an existing account";
+		cout << "\n4. Change Password";
+		ch = input("\nEnter your choice: ");
+		cout << "\n----------------------------------------";
+
+		switch (ch)
+		{
+			case 0:
+				cout << "\n********* PROGRAM ENDED **********";
+				break;
+
+			case 1:
+				A.newaccount();
+				break;
+
+			case 2:
+				A.acclogin();
+				break;
+
+			case 3:
+				A.delacc();
+				break;
+
+			case 4:
+				A.pswchange();
+				break;
+			default:
+				cout << "\nInvalid choice";
+		}
+
+	} while (ch != 0);
+	return 0;
+}
