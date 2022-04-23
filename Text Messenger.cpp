@@ -9,11 +9,11 @@
 using namespace std;
 
 //to deal with bad input
-int input_num(string prompt)
+int badinput(string prompt)
 {
-	int ch;
+	int inp;
 	cout << prompt;
-	cin >> ch;
+	cin >> inp;
 	while (cin.fail())
 	{
 		cin.clear();
@@ -21,7 +21,7 @@ int input_num(string prompt)
 		cout << "\nInvalid input. Try again. \n" << prompt;
 		cin >> ch;
 	}
-	return ch;
+	return inp;
 }
 
 //node for sent & received msg SLLs
