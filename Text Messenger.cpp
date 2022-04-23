@@ -378,9 +378,9 @@ void user::msgsearch(string title, msg **head)
 		vector<msg*> results;
 		for (m = *head; m != NULL; m = m->link)
 		{
-			if (title == "SENT TO ")//if we want to check sent messages to a user
+			if (title == "SENT TO ")   //if we want to check sent messages to a user
 				cmp = m->userto;
-			else //"RECEIVED FROM "
+			else (title == "RECIEVED FROM") //"RECEIVED FROM "
 				cmp = m->userfrom;
 
 			if (cmp == un) //message found
