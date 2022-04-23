@@ -53,37 +53,37 @@ class msg
 class user
 {
 	public:
-		bool logged_in;
+		bool loggedin;
 		string username;
 		string password;
-		msg *headS; 			//sent msg SLL head. so for each user we have a (single)linked list of sent messages
-		msg *headR; 			//received msg SLL head. so for each user we also have a (single)linked list of received messages
+		msg *head2; 			//sent msg SLL head. so for each user we have a (single)linked list of sent messages
+		msg *head1; 			//received msg SLL head. so for each user we also have a (single)linked list of received messages
 		vector<msg*> trash;		//vector of deleted msg
 		user *next;
 		user *prev;
 		//friend class messager;
 		user()
 		{
-			logged_in = false;
+			loggedin = false;
 			username = "";
 			password = "";
-			headS = NULL;
-			headR = NULL;
+			head2 = NULL;
+			head1 = NULL;
 			next = NULL;
 			prev = NULL;
 		}
 
 		void display_msgs(string title, msg *head);				//to display list of sent/inbox msg
-		void msg_options(string title, msg **head);				//actions user can perform with displayed list of msg
+		void useroptions(string title, msg **head);				//actions user can perform with displayed list of msg
 		void read_msg(msg *head);					        //to read a certain msg
 		void del_msg(msg **head);						//to delete a certain msg
 		void starUnstar_msg(msg *m);						//to mark an msg as important (star) or unstar
 		void vec_read_msg(vector<msg*> results);				//to read msg from search results
 		void vec_del_msg(vector<msg*> results, msg **head); 	                //to delete msg from search results
 		void vec_starUnstar(vector<msg*> results); 				//to star/unstar msg from search results
-		void search_msg(string title, msg **head);				//to search msg sent to/ received from a user
-		void starred_msg(string title, msg **head);				//displays list of starred msg
-		void trash_options();							//actions to perform on deleted msg
+		void msgsearch(string title, msg **head);				//to search msg sent to/ received from a user
+		void strmsg(string title, msg **head);				//displays list of starred msg
+		void deloptions();							//actions to perform on deleted msg
 		void del_permanently();							//to delete a msg from trash (permanently)
 		void read_trashMsg();							//to read a msg in trash
 
@@ -123,7 +123,7 @@ void user::display_msgs(string title, msg *head)
 }
 
 //Is only displayed if there are received/sent messages in the table.
-void user::msg_options(string title, msg **head)
+void user::useroptions(string title, msg **head)
 {
 	int ch;
 	do
@@ -350,7 +350,7 @@ void user::vec_starUnstar(vector<msg*> results)
 }
 
 //to search msg sent to/ received from a user
-void user::search_msg(string title, msg **head)
+void user::msgsearch(string title, msg **head)
 {
 	string un;
 	cout << "\nEnter the username: ";
@@ -443,7 +443,7 @@ void user::search_msg(string title, msg **head)
 }
 
 //displays list of starred msg
-void user::starred_msg(string title, msg **head)
+void user::strmsg(string title, msg **head)
 {
 
 	string R[] = { "unread", "read" };
@@ -529,7 +529,7 @@ void user::starred_msg(string title, msg **head)
 }
 
 //actions to perform on deleted msg
-void user::trash_options()
+void user::deloptions()
 {
 	int ch;
 	do
@@ -619,99 +619,99 @@ void user::read_trashMsg()
 
 class mailingclone
 {
-		user *start;		        //start pointer of user DLL
-		user *last;			//pointer to last node of user DLL
+		user *first;		        //start pointer of user DLL
+		user *end;			//pointer to last node of user DLL
 	public:
 		mailingclone()
 		{
-			start = NULL;
-			last = NULL;
+			first = NULL;
+			end = NULL;
 		}
 
-		bool is_empty();			//returns true if no user has created account yet
-		user* accept();				//takes input required while creating a new account
-		void create(); 				//creates new user account & adds it to user DLL(sign-up)
-		void login();  				//to login to an existing account
-		void remove(); 				//to delete your account
-		void change_pw();			//to change current password
-		void activity(user *ptr); 		//actions that user can perform while logged in
-		msg* msg_sent(); 				//takes input to send msg, updates receiver's inbox & returns pointer to sent msg
-		void send_msg(user *ptr); 		//calls msg_sent() & updates user's sent msg sll
+		bool noaccount();			//returns true if no user has created account yet
+		user* inputacc();				//takes input required while creating a new account
+		void acclogin();  				//to login to an existing account
+		void delacc(); 				//to delete your account
+		void pswchange();			//to change current password
+		void useractions(user *n); 		//actions that user can perform while logged in
+		void newaccount(); 				//creates new user account & adds it to user DLL(sign-up)
+		msg* sendmessage(); 				//takes input to send msg, updates receiver's inbox & returns pointer to sent msg
+		void sendmsgfunc(user *n); 		//calls msg_sent() & updates user's sent msg sll
 };
 
 //returns true if no user has created account yet
-bool mailingclone::is_empty()
+bool mailingclone::noaccount()
 {
-	if (start == NULL)
+	if (first == NULL)
 		return true;
 	else
 		return false;
 }
 
 //takes input required while creating a new account
-user* mailingclone::accept()
+user* mailingclone::inputacc()
 {
 	bool un_exist = false;
-	user *tmp = new user(); //new user node
-	user *ptr;
+	user *m = new user(); //new user node
+	user *n;
 	do
 	{
-		ptr = start;
+		n = first;
 		cout << "\nEnter username to create : ";
-		cin >> tmp->username;
-		while (ptr != NULL)
+		cin >> m->username;
+		while (n != NULL)
 		{
-			if (ptr->username == tmp->username)
+			if (n->username == m->username)
 			{
 				cout << "\nEntered username already exists.";
 				un_exist = true;
 				break;
 			}
-			ptr = ptr->next;
+			n = n->next;
 		}
-		if (ptr == NULL)
+		if (n == NULL)
 			un_exist = false;
 	} while (un_exist); // repeat till username isn't unique
 	cout << "\nCreate password: ";
-	cin >> tmp->password;
-	return tmp;
+	cin >> m->password;
+	return m;
 }
 
 //creates new user account & adds it to user dll(sign-up)
-void mailingclone::create()
+void mailingclone::newaccount()
 {
-	user *tmp = accept(); //accepts new username and password
-	if (is_empty()) //checks if user linked list is empty
+	user *m = inputacc(); //accepts new username and password
+	if (noaccount()) //checks if user linked list is empty
 	{
-		start = tmp;
-		last = tmp;
+		first = m;
+		end = m;
 	}
 	else
 	{
-		last->next = tmp;
-		tmp->prev = last;
-		last = tmp;
+		end->next = m;
+		m->prev = end;
+		end = m;
 	}
 	cout << "\nYour account has been created successfully!";
 }
 
 //to login to an existing account
-void mailingclone::login()
+void mailingclone::acclogin()
 {
-	string un, pw;
+	string usrnm, pass;
 	cout << "\nEnter username: ";
-	cin >> un;
-	for (user *ptr = start; ptr != NULL; ptr = ptr->next) //search for username in the user linked list
+	cin >> usrnm;
+	for (user *n = first; n != NULL; n = n->next) //search for username in the user linked list
 	{
-		if (ptr->username == un)
+		if (n->username == usrnm)
 		{
 			cout << "\nEnter password: ";
-			cin >> pw;
-			if (ptr->password == pw)
-			{ // ptr is the node of the found user
-				ptr->logged_in = true; //if username and password is correct then log in
+			cin >> pass;
+			if (n->password == pass)
+			{ // n is the node of the found user
+				n->loggedin = true; //if username and password is correct then log in
 				cout << "\nSuccessfully logged in.";
-				activity(ptr); //displays the next set of instructions the user can perform
+				useractions(n); //displays the next set of instructions the user can perform
 				return;
 			}
 			else
@@ -724,26 +724,26 @@ void mailingclone::login()
 	cout << "\nUsername not found.";
 }
 
-//to delete your account //removes ptr from user dll
-void mailingclone::remove()
+//to delete your account //removes n from user dll
+void mailingclone::delacc()
 {
 	char ch;
-	string un, pw;
+	string usrnm, pass;
 
 	cout << "\nEnter username: ";
-	cin >> un;
+	cin >> usrnm;
 
-	if (is_empty())
+	if (noaccount())
 		cout << "\nCurrently no user accounts exist.";
 
-	for (user *curr = start; curr != NULL; curr = curr->next)
+	for (user *exst = first; exst != NULL; exst = exst->next)
 	{
-		if (curr->username == un)
+		if (exst->username == usrnm)
 		{
 			cout << "\nEnter the password: ";
-			cin >> pw;
+			cin >> pass;
 
-			if (curr->password == pw)
+			if (exst->password == pass)
 			{
 				do
 				{
@@ -755,18 +755,18 @@ void mailingclone::remove()
 				} while (ch != 'Y' || ch != 'N');
 
 				//if start node
-				if (curr == start)
-					start = curr->next;
+				if (exst == first)
+					first = exst->next;
 
 				//if curr is not last node
-				if (curr->next != NULL)
-					(curr->next)->prev = curr->prev;
+				if (exst->next != NULL)
+					(exst->next)->prev = exst->prev;
 
 				//if curr is not 1st node
-				if (curr->prev != NULL)
-					(curr->prev)->next = curr->next;
+				if (exst->prev != NULL)
+					(exst->prev)->next = exst->next;
 
-				delete curr;
+				delete exst;
 				cout << "\nYour account has been deleted successfully!";
 				return;
 			}
@@ -781,25 +781,25 @@ void mailingclone::remove()
 }
 
 //to change current password
-void mailingclone::change_pw()
+void mailingclone::pswchange()
 {
-	string un, pw, pw1;
+	string usrnm, pass, pass1;
 	cout << "\nEnter username: ";
-	cin >> un;
+	cin >> usrnm;
 
-	for (user *ptr = start; ptr != NULL; ptr = ptr->next)
+	for (user *n = first; n != NULL; n = n->next)
 	{
-		if (ptr->username == un)
+		if (n->username == usrnm)
 		{
 			do
 			{
 				cout << "\nEnter previous password: ";
-				cin >> pw;
-				if (ptr->password == pw)
+				cin >> pass;
+				if (n->password == pass)
 				{
 					cout << "\nEnter new password : ";
-					cin >> pw1;
-					ptr->password = pw1;
+					cin >> pass1;
+					n->password = pass1;
 
 					cout << "\nYour password has been changed successfully!";
 					return;
@@ -813,13 +813,13 @@ void mailingclone::change_pw()
 }
 
 //actions that user can perform while logged in
-void mailingclone::activity(user *ptr)
+void mailingclone::useractions(user *n)
 { //ptr contains the current(logged in) user information
-	int ch;
+	int i;
 	do
 	{
-		cout << "\n************* HELLO @"<< ptr->username<< " ! *************";
-		cout << "\n0. Logout";
+		cout << "\n************* HELLO @"<< n->username<< "! WELCOME TO MAILIT! *************";
+		cout << "\n0. Logout of your account";
 		cout << "\n1. Check inbox messages";
 		cout << "\n2. Send a message";
 		cout << "\n3. View sent messages";
@@ -828,99 +828,99 @@ void mailingclone::activity(user *ptr)
 		cout << "\n6. View deleted messages";
 		cout << "\n7. View starred messages in Inbox";
 		cout << "\n8. View starred messages in Sentbox";
-		ch = input("\nEnter your choice: ");
+		i = input("\nEnter your choice: ");
 		cout << "\n------------------------------------------\n";
 
-		switch (ch)
+		switch (i)
 		{
 			case 0:
-				ptr->logged_in = false;
+				n->loggedin = false;
 				cout << "\nSuccessfully logged out.";
 				return;
 
 			case 1:
-				ptr->msg_options("INBOX", &ptr->headR);
+				n->useroptions("INBOX", &n->head1);
 				break;
 
 			case 2:
-				send_msg(ptr);
+				sendmsgfunc(n);
 				break;
 
 			case 3:
-				ptr->msg_options("SENT", &ptr->headS);
+				n->useroptions("SENT", &n->head2);
 				break;
 
 			case 4:
-				ptr->search_msg("SENT TO ", &ptr->headS);
+				n->msgsearch("SENT TO ", &n->head2);
 				break;
 
 			case 5:
-				ptr->search_msg("RECEIVED FROM ", &ptr->headR);
+				n->msgsearch("RECEIVED FROM ", &n->head1);
 				break;
 
 			case 6:
-				ptr->trash_options();
+				n->deloptions();
 				break;
 
 			case 7:
-				ptr->starred_msg("INBOX ", &ptr->headR); //sends the head of the received msgs sll for current user
+				n->strmsg("INBOX ", &n->head1); //sends the head of the received msgs sll for current user
 				break;
 
 			case 8:
-				ptr->starred_msg("SENTBOX ", &ptr->headS); ////sends the head of the sent msgs sll for current user
+				n->strmsg("SENTBOX ", &n->head2); ////sends the head of the sent msgs sll for current user
 				break;
 
 			default:
 				cout << "\nInvalid choice";
 		}
 
-	} while (ch != 0);
+	} while (i != 0);
 }
 
 //takes input to send msg, updates receiver's inbox & returns pointer to sent msg
-msg* mailingclone::msg_sent()
+msg* mailingclone::sendmessage()
 {
-	msg *m = new msg(); // new node of msg linked list
-	user *ptrT; 				//pointer To whom user is sending msg
-	bool un_exist = false;		// stays false till user enters a correct username to which msg is sent
+	msg *messg = new msg(); // new node of msg linked list
+	user *msgptr; 				//pointer To whom user is sending msg
+	bool userexist = false;		// stays false till user enters a correct username to which msg is sent
 	do
 	{
 		cout << "Enter username of user to message : ";
-		cin >> m->to;
+		cin >> messg->to;
 		getchar(); //'\n'
 
 		//updating receiver's received msg sll
-		for (ptrT = start; ptrT != NULL; ptrT = ptrT->next) //search for username in user dll
+		for (msgptr = first; msgptr != NULL; msgptr = msgptr->next) //search for username in user dll
 		{
-			if (ptrT->username == m->to)
+			if (msgptr->username == messg->to)
 			{
-				cout << "\nEnter message you want to send to @" <<m->to<< " :\n";
-				getline(cin, m->text); //took input msg and stored at m->text
+				cout << "\nEnter message you want to send to @" <<messg->to<< " :\n";
+				getline(cin, messg->text); //took input msg and stored at m->text
 
-				m->read = false;
+				messg->read = false;
 				time_t now = time(0); 		// current date/time based on current system
-				m->dt = ctime(&now);		// convert now to string form
-				un_exist = true;			// made true since username is now found
-				cout << "\nMessage sent successfully to @" << m->to;
+				messg->dt = ctime(&now);		// convert now to string form
+				userexist = true;			// made true since username is now found
+				cout << "\nMessage sent successfully to @" << messg->to;
 
 				//insert new msg at beginning of ptrT's received msg sll
-				m->link = ptrT->headR;
-				ptrT->headR = m;
-				return m;
+				messg->link = msgptr->head1;
+				msgptr->head1 = messg;
+				return messg;
 			}
 		}
 
-		if (ptrT == NULL) //!un_exist
+		if (msgptr == NULL) //!un_exist
 			cout << "\nEntered username doesn't exist.\n";
 
-	} while (un_exist == false);
-	return m;
+	} while (userexist == false);
+	return messg;
 }
 
 //calls msg_sent() & updates user's sent msg sll
-void mailingclone::send_msg(user *ptr)
+void mailingclone::sendmsgfunc(user *ptr)
 {
-	msg *ms = msg_sent(); 		//pointer to sent msg
+	msg *ms = sendmessage(); 		//pointer to sent msg
 	ms->from = ptr->username;
 
 	//updating sender's (logged-in user's) sent msg sll
@@ -933,8 +933,8 @@ void mailingclone::send_msg(user *ptr)
 	m->text = ms->text;
 
 	//insert sent msg at beginning of sent sll
-	m->link = ptr->headS;
-	ptr->headS = m;
+	m->link = ptr->head2;
+	ptr->head2 = m;
 }
 
 int main()
@@ -960,19 +960,19 @@ int main()
 				break;
 
 			case 1:
-				A.create();
+				A.newaccount();
 				break;
 
 			case 2:
-				A.login();
+				A.acclogin();
 				break;
 
 			case 3:
-				A.remove();
+				A.delacc();
 				break;
 
 			case 4:
-				A.change_pw();
+				A.pswchange();
 				break;
 			default:
 				cout << "\nInvalid choice";
