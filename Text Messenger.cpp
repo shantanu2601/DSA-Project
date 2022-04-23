@@ -944,7 +944,7 @@ int main()
 	do
 	{
 		cout << "\n----------------------------------------";
-		cout << "\n******** WELCOME TO MESSAGER **********";
+		cout << "\n******** WELCOME TO TEXT MESSENGER **********";
 		cout << "\n0. Exit application";
 		cout << "\n1. Create new account";
 		cout << "\n2. Login to your account";
@@ -956,7 +956,7 @@ int main()
 		switch (ch)
 		{
 			case 0:
-				cout << "\n********* PROGRAM ENDED **********";
+				cout << "\n********* THANK YOU! **********";
 				break;
 
 			case 1:
