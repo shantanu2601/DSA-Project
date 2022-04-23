@@ -561,7 +561,7 @@ void user::trash_options()
 		cout << "\n0. Exit";
 		cout << "\n1. Delete a message permanently";
 		cout << "\n2. View a message";
-		ch = input_num("\nEnter your choice: ");
+		ch = input("\nEnter your choice: ");
 		cout << "\n---------------------------------------------";
 
 		switch (ch)
@@ -617,12 +617,12 @@ void user::read_trashMsg()
 	trash[no - 1]->read = true;
 }
 
-class messager
+class mailingclone
 {
-		user *start;		//start pointer of user DLL
+		user *start;		        //start pointer of user DLL
 		user *last;			//pointer to last node of user DLL
 	public:
-		messager()
+		mailingclone()
 		{
 			start = NULL;
 			last = NULL;
@@ -640,7 +640,7 @@ class messager
 };
 
 //returns true if no user has created account yet
-bool messager::is_empty()
+bool mailingclone::is_empty()
 {
 	if (start == NULL)
 		return true;
@@ -649,7 +649,7 @@ bool messager::is_empty()
 }
 
 //takes input required while creating a new account
-user* messager::accept()
+user* mailingclone::accept()
 {
 	bool un_exist = false;
 	user *tmp = new user(); //new user node
@@ -678,7 +678,7 @@ user* messager::accept()
 }
 
 //creates new user account & adds it to user dll(sign-up)
-void messager::create()
+void mailingclone::create()
 {
 	user *tmp = accept(); //accepts new username and password
 	if (is_empty()) //checks if user linked list is empty
@@ -696,7 +696,7 @@ void messager::create()
 }
 
 //to login to an existing account
-void messager::login()
+void mailingclone::login()
 {
 	string un, pw;
 	cout << "\nEnter username: ";
@@ -725,7 +725,7 @@ void messager::login()
 }
 
 //to delete your account //removes ptr from user dll
-void messager::remove()
+void mailingclone::remove()
 {
 	char ch;
 	string un, pw;
@@ -781,7 +781,7 @@ void messager::remove()
 }
 
 //to change current password
-void messager::change_pw()
+void mailingclone::change_pw()
 {
 	string un, pw, pw1;
 	cout << "\nEnter username: ";
@@ -813,7 +813,7 @@ void messager::change_pw()
 }
 
 //actions that user can perform while logged in
-void messager::activity(user *ptr)
+void mailingclone::activity(user *ptr)
 { //ptr contains the current(logged in) user information
 	int ch;
 	do
@@ -878,7 +878,7 @@ void messager::activity(user *ptr)
 }
 
 //takes input to send msg, updates receiver's inbox & returns pointer to sent msg
-msg* messager::msg_sent()
+msg* mailingclone::msg_sent()
 {
 	msg *m = new msg(); // new node of msg linked list
 	user *ptrT; 				//pointer To whom user is sending msg
@@ -918,7 +918,7 @@ msg* messager::msg_sent()
 }
 
 //calls msg_sent() & updates user's sent msg sll
-void messager::send_msg(user *ptr)
+void mailingclone::send_msg(user *ptr)
 {
 	msg *ms = msg_sent(); 		//pointer to sent msg
 	ms->from = ptr->username;
@@ -940,14 +940,14 @@ void messager::send_msg(user *ptr)
 int main()
 {
 	int ch;
-	messager A;
+	mailingclone A;
 	do
 	{
 		cout << "\n----------------------------------------";
-		cout << "\n******** WELCOME TO MESSAGER **********";
+		cout << "\n******** WELCOME TO MAILIT! **********";
 		cout << "\n0. Exit application";
-		cout << "\n1. Create new account";
-		cout << "\n2. Login to your account";
+		cout << "\n1. Create a new mailit account";
+		cout << "\n2. Login to your existing mailit account";
 		cout << "\n3. Delete an existing account";
 		cout << "\n4. Change Password";
 		ch = input("\nEnter your choice: ");
@@ -981,3 +981,4 @@ int main()
 	} while (ch != 0);
 	return 0;
 }
+
