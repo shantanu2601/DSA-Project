@@ -19,7 +19,7 @@ int badinput(string prompt)
 		cin.clear();
 		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		cout << "\nInvalid input. Try again. \n" << prompt;
-		cin >> ch;
+		cin >> inp;
 	}
 	return inp;
 }
