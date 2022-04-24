@@ -72,9 +72,9 @@ void mailingclone::useractions(user *n)
 //takes input to send msg, updates receiver's inbox & returns pointer to sent msg
 msg* mailingclone::sendmessage()
 {
-	msg *messg = new msg(); // new node of msg linked list
-	user *msgptr; 				//pointer To whom user is sending msg
-	bool userexist = false;		// stays false till user enters a correct username to which msg is sent
+	msg *messg = new msg();                  // new node of msg linked list
+	user *msgptr; 				//  pointer To whom user is sending msg
+	bool userexist = false;		       //   stays false till user enters a correct username to which msg is sent
 	do
 	{
 		cout << "Enter username of user to message : ";
